@@ -17,6 +17,13 @@
 #define STAR_DENS   280.0   // stars per unit area (approximate)
 #define NEBULA_R    0.55    // nebula radius (in tile units)
 #define ROT_SPEED   0.010   // radians/second
+// Star brightness falloff parameters:
+//   STAR_MAG_EXP: power applied to random magnitude — higher = fewer bright stars
+//   STAR_FALLOFF_BASE: Gaussian width² for faint stars (tighter = sharper point)
+//   STAR_FALLOFF_VAR: extra Gaussian tightening for bright stars (varying PSF)
+#define STAR_MAG_EXP      3.0
+#define STAR_FALLOFF_BASE 800.0
+#define STAR_FALLOFF_VAR  600.0
 #define PI          3.14159265358979
 
 const vec3 C_SPACE    = vec3(0.00, 0.01, 0.06);  // deep space black
@@ -45,7 +52,7 @@ float starField(vec2 p, float scale) {
         vec2 pos = hash22(c) * 0.5 + 0.5;  // star position in [0,1]²
         float mag = hash21(c + 0.5);        // magnitude 0..1
         float r   = length(frac - vec2(dx,dy) - pos);
-        float br  = pow(mag, 3.0) * exp(-r * r * (800.0 + mag*600.0));
+        float br  = pow(mag, STAR_MAG_EXP) * exp(-r * r * (STAR_FALLOFF_BASE + mag*STAR_FALLOFF_VAR));
         b += br;
     }
     return clamp(b, 0.0, 1.0);

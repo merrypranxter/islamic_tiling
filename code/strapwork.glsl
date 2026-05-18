@@ -13,11 +13,14 @@
 //
 // References: Hankin (1925), Broug (2008) "Islamic Geometric Patterns"
 
-#define SCALE       3.5
-#define BAND_W      0.10      // half-width of each band ribbon
-#define BAND_EDGE   0.02      // bevel/anti-alias edge width
-#define SHADOW_D    0.015     // shadow offset at crossing
-#define PI          3.14159265358979
+#define SCALE            3.5
+#define BAND_W           0.10      // half-width of each band ribbon
+#define BAND_EDGE        0.02      // bevel/anti-alias edge width
+#define SHADOW_D         0.015     // shadow offset at crossing
+#define PI               3.14159265358979
+// Parity threshold: mod(mA+mB, 2) < PARITY_THRESHOLD → family A is "over"
+// Value of 0.5 gives a clean 50/50 split between over and under strands
+#define PARITY_THRESHOLD 0.5
 
 const vec3 COL_GOLD   = vec3(0.95, 0.78, 0.10);
 const vec3 COL_BLUE   = vec3(0.08, 0.18, 0.55);
@@ -70,7 +73,7 @@ float overUnder(vec2 p, int famA, float sp) {
     if (famB < 0) return 1.0;
     float mA = strandIdx(p, famA, sp);
     float mB = strandIdx(p, famB, sp);
-    return (mod(mA + mB, 2.0) < 0.5) ? 1.0 : -1.0;
+    return (mod(mA + mB, 2.0) < PARITY_THRESHOLD) ? 1.0 : -1.0;
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {

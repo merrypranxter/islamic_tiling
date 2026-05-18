@@ -66,14 +66,20 @@ float allDist(vec2 p, float sp) {
 }
 
 // --- Tile type from index sum modulo 10 ---
-// Returns 0=decagon, 1=pentagon, 2=barrel, 3=bowtie, 4=rhombus
+// The mod-10 classes partition the dual pentagrid into tile types.
+// Boundaries are at half-integers between the 10 equivalence classes:
+//   class 0 and 5 → decagon (the two antipodal 10-fold centres)
+//   class 1,4,6,9 → pentagon/bowtie
+//   class 2,3,7,8 → barrel/rhombus
+// TILE_EPS (0.5) is the half-integer threshold separating adjacent classes.
+#define TILE_EPS 0.5
 int tileType(vec2 p, float sp) {
     float s = mod(pgSum(p, sp), 10.0);
-    if (s < 0.5 || (s > 4.5 && s < 5.5)) return 0; // decagon centres
-    if (s < 2.5 || (s > 7.5))             return 1; // pentagon
-    if (s < 3.5 || (s > 6.5 && s < 7.5)) return 2; // barrel
-    if (s < 4.5 || (s > 5.5 && s < 6.5)) return 3; // bowtie
-    return 4;                                        // rhombus
+    if (s < TILE_EPS || (s > 4.5 && s < 5.5))   return 0; // decagon centres
+    if (s < 2.5      || (s > 7.5))               return 1; // pentagon
+    if (s < 3.5      || (s > 6.5 && s < 7.5))   return 2; // barrel
+    if (s < 4.5      || (s > 5.5 && s < 6.5))   return 3; // bowtie
+    return 4;                                               // rhombus
 }
 
 vec3 tileColor(int t) {

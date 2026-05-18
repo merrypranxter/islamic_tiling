@@ -18,12 +18,17 @@
 //
 // The result should be felt as rhythm — a visual tabla.
 
-#define SCALE       4.0
-#define LINE_W      0.030
-#define WAVE_SPEED  1.5      // tile-widths per second
-#define WAVE_DECAY  1.8      // spatial decay of wave amplitude
-#define FLARE_DUR   0.5      // duration of tile-pluck flare (seconds)
-#define PI          3.14159265358979
+#define SCALE        4.0
+#define LINE_W       0.030
+#define WAVE_SPEED   1.5     // tile-widths per second
+#define WAVE_DECAY   1.8     // spatial decay of wave amplitude
+#define FLARE_DUR    0.5     // duration of tile-pluck flare (seconds)
+#define PI           3.14159265358979
+// Musical timing constants
+// WAVE_PERIOD: one "bar" in tile-travel time; secondary wavefronts offset by WAVE_PERIOD/4
+#define WAVE_PERIOD  3.5     // seconds between repeating wavefronts (one musical phrase)
+// BEAT_MEASURES: number of WAVE_PERIODs per screen-wide accent pulse (≈ 4-beat measure)
+#define BEAT_MEASURES 4.0
 
 // Pentatonic note colours (warm → cool progression matches C D E G A)
 const vec3 NOTE_DO  = vec3(0.95, 0.82, 0.10);  // C — gold
@@ -116,8 +121,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // Multiple concentric wavefronts (like plucking a string repeatedly)
     float waveAmp = 0.0;
     for (int i = 0; i < 4; i++) {
-        float wavePeriod = 3.5;
-        float tOff       = float(i) * wavePeriod * 0.25;
+        float tOff       = float(i) * WAVE_PERIOD * 0.25;
         float wavefrontR = mod(iTime * WAVE_SPEED - tOff, 20.0);
         waveAmp += wavePulse(p, wavefrontR) / (float(i) + 1.0);
     }
@@ -138,10 +142,9 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float flareAmp = 0.0;
     float r = length(p);
     for (int i = 0; i < 4; i++) {
-        float wavePeriod = 3.5;
-        float tOff       = float(i) * wavePeriod * 0.25;
-        float arrivalT   = r / WAVE_SPEED + tOff;
-        float tSinceArr  = mod(iTime - arrivalT, wavePeriod);
+        float tOff      = float(i) * WAVE_PERIOD * 0.25;
+        float arrivalT  = r / WAVE_SPEED + tOff;
+        float tSinceArr = mod(iTime - arrivalT, WAVE_PERIOD);
         flareAmp += exp(-tSinceArr / FLARE_DUR) * isRos / (float(i)+1.0);
     }
     flareAmp = clamp(flareAmp, 0.0, 2.0);
@@ -151,7 +154,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // ---- Beat marker: central pulse ----
     // A slow accent pulse on the whole screen to mark measure boundaries
-    float beatPeriod = 4.0 * (3.5 / (WAVE_SPEED * SCALE)); // ≈ musical measure
+    // beatPeriod: BEAT_MEASURES phrases × WAVE_PERIOD / (speed × scale) = screen-crossing time
+    float beatPeriod = BEAT_MEASURES * (WAVE_PERIOD / (WAVE_SPEED * SCALE));
     float beat = exp(-mod(iTime, beatPeriod) * 3.0) * 0.15;
     col += vec3(beat);
 

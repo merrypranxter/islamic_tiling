@@ -62,6 +62,13 @@ float sumIdx(vec2 p, float sp, float gOff) {
     return s;
 }
 
+// Region classification boundaries (mod-10 pentagrid index-sum space):
+//   DECA_LO/HI: the two antipodal decagon-centre classes (0 and 5)
+//   Half-integer thresholds separate adjacent equivalence classes.
+#define DECA_LO_MAX 0.5   // class 0 upper bound
+#define DECA_HI_MIN 4.5   // class 5 lower bound
+#define DECA_HI_MAX 5.5   // class 5 upper bound
+
 // Region type: 0=large(lapis), 1=medium(turquoise), 2=small(ivory)
 // Derived from the two-level index sums
 int regionType(vec2 p, float sp) {
@@ -69,9 +76,9 @@ int regionType(vec2 p, float sp) {
     float sFine   = mod(sumIdx(p, sp/PHI2,   0.1), 10.0);
     
     // Coarse level: decagon centres → lapis
-    if (sCoarse < 0.5 || (sCoarse > 4.5 && sCoarse < 5.5)) return 0;
+    if (sCoarse < DECA_LO_MAX || (sCoarse > DECA_HI_MIN && sCoarse < DECA_HI_MAX)) return 0;
     // Fine level: decagon centres → turquoise
-    if (sFine   < 0.5 || (sFine   > 4.5 && sFine   < 5.5)) return 1;
+    if (sFine   < DECA_LO_MAX || (sFine   > DECA_HI_MIN && sFine   < DECA_HI_MAX)) return 1;
     return 2; // ivory
 }
 

@@ -18,6 +18,9 @@
 #define GLITCH_INT  0.6      // glitch intensity envelope peak
 #define SCAN_FREQ   0.5      // scanline density (0.5 = every other pixel)
 #define CA_STRENGTH 0.008    // chromatic aberration max offset
+// BIT_DEPTH: simulated colour depth for quantisation artefacts in shadow regions.
+// 16 levels per channel ≈ a 4-bit display, producing visible banding in dark areas.
+#define BIT_DEPTH   16.0
 #define PI          3.14159265358979
 
 const vec3 C_BG   = vec3(0.04, 0.09, 0.28);
@@ -112,8 +115,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // ---- Bit-depth quantisation in dark areas ----
     float luma = dot(col, vec3(0.299, 0.587, 0.114));
-    float bits = 16.0;
-    vec3  quantised = floor(col * bits) / bits;
+    vec3  quantised = floor(col * BIT_DEPTH) / BIT_DEPTH;
     col = mix(col, quantised, smoothstep(0.25, 0.0, luma));
 
     // ---- Rosette centres resist corruption (order fighting chaos) ----

@@ -14,10 +14,13 @@
 // "Consider the creation of the heavens and the earth and the alternation
 //  of night and day and [what] God has sent down from the heavens." — Quran
 
-#define SCALE       4.0
-#define WALL_W      0.045    // cell wall half-width
-#define VASC_W      0.018    // vascular network half-width
-#define NUC_R       0.12     // nucleus radius (tile units)
+#define SCALE              4.0
+#define WALL_W             0.045    // cell wall half-width
+#define VASC_W             0.018    // vascular network half-width
+#define NUC_R              0.12     // nucleus radius (tile units)
+// CHROMATIN_THRESHOLD: noise value above which chromatin granules are rendered.
+// 0.55 means ~45% of nucleus area shows chromatin flecks, matching real cell images.
+#define CHROMATIN_THRESHOLD 0.55
 #define PULSE_HZ    0.30     // breathing frequency (Hz)
 #define PI          3.14159265358979
 #define PHI         1.61803398874989
@@ -108,7 +111,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     col = mix(col, C_NUC, nucMask * inside);
     // Chromatin: brighter specks within nucleus (noise-textured)
     float chromTex = noise2(p * 8.0 + iTime*0.1);
-    float chromMask = nucMask * inside * step(0.55, chromTex);
+    float chromMask = nucMask * inside * step(CHROMATIN_THRESHOLD, chromTex);
     col = mix(col, C_CHROM, chromMask * 0.8);
     // Nucleus membrane ring
     float nucRing = abs(rPot + 4.7) < 0.25 ? 1.0 : 0.0;

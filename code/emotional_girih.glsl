@@ -12,9 +12,17 @@
 // State transitions are smooth (cross-faded over ~2 seconds).
 // Emotion index: floor(iTime / STATE_DUR) mod 5
 
-#define STATE_DUR   8.0      // seconds per emotional state
-#define SCALE       4.0
-#define PI          3.14159265358979
+#define STATE_DUR       8.0   // seconds per emotional state
+#define SCALE           4.0
+#define PI              3.14159265358979
+// Emotion transition boundaries (in continuous emotion index emoF ∈ [0,5)):
+//   GRIEF starts ramping in at EMO_GRIEF_START, fully present at EMO_GRIEF_PEAK
+//   AWE glow starts at EMO_AWE_START, fully present at EMO_AWE_PEAK
+// These are used for state-specific visual effects that differ from palette blending.
+#define EMO_GRIEF_START 1.5
+#define EMO_GRIEF_PEAK  2.5
+#define EMO_AWE_START   2.5
+#define EMO_AWE_PEAK    3.5
 
 // Emotion palettes [bg, line, accent]
 const vec3 E_BG[5]   = vec3[5](
@@ -79,7 +87,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // Speed and line width vary with emotion
     float speed = mix(0.01, 0.12, emoF / 4.0);   // calm=slow, chaos=fast
     float lw    = mix(0.025, 0.055, sin(emoF*PI/4.0)*0.5+0.5);
-    float grief = smoothstep(1.5, 2.5, emoF) * (1.0 - smoothstep(2.5, 3.5, emoF));
+    float grief = smoothstep(EMO_GRIEF_START, EMO_GRIEF_PEAK, emoF)
+                * (1.0 - smoothstep(EMO_AWE_START, EMO_AWE_PEAK, emoF));
     
     // Motion (pan direction and speed depend on emotion)
     vec2 dir = vec2(cos(emoF*1.3), sin(emoF*0.9));
@@ -105,7 +114,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float d = allDist(p, sp, emoF);
 
     // Glow (stronger in awe state)
-    float aweFactor = smoothstep(2.5, 3.5, emoF) * (1.0 - smoothstep(3.5, 4.5, emoF));
+    float aweFactor = smoothstep(EMO_AWE_START, EMO_AWE_PEAK, emoF)
+                    * (1.0 - smoothstep(EMO_AWE_PEAK, 4.5, emoF));
     float glow = 0.008 / (d*d + 0.001);
     col += lineCol * glow * (0.4 + aweFactor * 1.2);
 
@@ -113,7 +123,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float lm = 1.0 - smoothstep(lw - 0.005, lw + 0.005, d);
     col = mix(col, lineCol, lm);
     // Joy: extra inner glow on lines
-    float joyFactor = smoothstep(0.5, 1.5, emoF) * (1.0 - smoothstep(1.5, 2.5, emoF));
+    float joyFactor = smoothstep(0.5, EMO_GRIEF_START, emoF)
+                    * (1.0 - smoothstep(EMO_GRIEF_START, EMO_GRIEF_PEAK, emoF));
     col += accCol * lm * joyFactor * 0.5;
 
     // Vignette
