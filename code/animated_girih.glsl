@@ -17,6 +17,8 @@
 #define PULSE_HZ    0.8      // breathing cycles per second
 #define GROW_SPEED  1.2      // tile radii unveiled per second
 #define ROT_SPEED   0.018    // radians per second after growth
+#define GROWTH_SOFT_INNER  1.2   // tiles behind front by this much are fully revealed
+#define GROWTH_SOFT_OUTER  0.3   // tiles ahead of front by this much are partially revealed
 #define PI          3.14159265358979
 
 const vec3 C_BG   = vec3(0.04, 0.09, 0.28);
@@ -96,11 +98,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float reveal = smoothstep(growFront - GROWTH_SOFT_INNER, growFront + GROWTH_SOFT_OUTER, dist);
     col = mix(col, C_BG, reveal);
 
-    // Growth front transition widths:
-//   GROWTH_SOFT_INNER: tiles within this distance behind front are fully revealed
-//   GROWTH_SOFT_OUTER: tiles within this distance ahead of front are partially revealed
-#define GROWTH_SOFT_INNER  1.2
-#define GROWTH_SOFT_OUTER  0.3
     float seedGlow = exp(-length(p)*length(p) * 2.0);
     col += C_SEED * seedGlow * 0.8 * smoothstep(0.0, 0.5, iTime);
 
