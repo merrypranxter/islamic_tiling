@@ -1,0 +1,63 @@
+{
+  "name": "islamic_tiling",
+  "version": "1.0.0",
+  "description": "Islamic geometric pattern generation: girih tiles, rosettes, star polygons, quasicrystalline tessellation",
+  "category": "geometry/pattern",
+  "tags": ["islamic", "girih", "geometry", "tessellation", "quasicrystal", "pattern", "sacred", "rosette", "star_polygon", "strapwork"],
+  "primary_concepts": [
+    "Polygonal sub-grid construction method",
+    "Girih tile aperiodic tiling",
+    "Five-fold and ten-fold symmetry",
+    "Quasicrystalline order (Darb-i Imam)",
+    "Strapwork interlacing",
+    "Proportional systems (√2, √3, φ)",
+    "Compass and straightedge construction"
+  ],
+  "blend_suggestions": [
+    "sacred_geometry",
+    "quasicrystals",
+    "origami_creases",
+    "crystalline",
+    "caustic_networks",
+    "bioluminescent_systems",
+    "tesselations"
+  ],
+  "code_templates": [
+    "code/basic_girih.glsl",
+    "code/girih_tiles.glsl",
+    "code/strapwork.glsl",
+    "code/darb_imam.glsl",
+    "code/animated_girih.glsl",
+    "code/emotional_girih.glsl",
+    "code/cosmic_girih.glsl",
+    "code/digital_girih.glsl",
+    "code/biological_girih.glsl",
+    "code/musical_girih.glsl"
+  ],
+  "parameter_space": {
+    "symmetryOrder": {"type": "enum", "options": [5, 6, 8, 10, 12], "default": 10},
+    "patternDensity": {"type": "int", "range": [1, 5], "default": 3},
+    "tileType": {"type": "enum", "options": ["girih", "polygonal", "rosette", "star"], "default": "girih"},
+    "strapwork": {"type": "bool", "default": true},
+    "weaveRule": {"type": "enum", "options": ["over_under", "alternate", "random"], "default": "over_under"},
+    "colorScheme": {"type": "enum", "options": ["traditional", "metallic", "jewel", "night", "modern"], "default": "traditional"},
+    "goldLeaf": {"type": "float", "range": [0.0, 1.0], "default": 0.3},
+    "lineWidth": {"type": "float", "range": [0.001, 0.05], "default": 0.005},
+    "animation": {"type": "enum", "options": ["none", "rotate", "pulse", "grow", "morph"], "default": "none"},
+    "quasiCrystal": {"type": "bool", "default": true},
+    "background": {"type": "enum", "options": ["solid", "gradient", "space", "architectural"], "default": "solid"},
+    "decoration": {"type": "enum", "options": ["plain", "interlace", "knot", "arabesque"], "default": "interlace"}
+  },
+  "artistic_keywords": [
+    "islamic geometry",
+    "girih",
+    "quasicrystal",
+    "Darb-i Imam",
+    "Alhambra",
+    "strapwork",
+    "rosette",
+    "sacred geometry",
+    "five-fold symmetry",
+    "Penrose tiling"
+  ]
+}
