@@ -11,7 +11,13 @@
 //   3. Shadow/highlight: over-strand is bright, under-strand is darkened
 //   4. The ribbon has a finite width with bevelled edges
 //
-// References: Hankin (1925), Broug (2008) "Islamic Geometric Patterns"
+// Shadow rendering constants
+// SHADOW_OPACITY: fraction of COL_SHADOW blended onto background below an over-strand
+// SHADOW_FRINGE_OPACITY: maximum shadow blend at crossing edge
+// OVER_THRESHOLD: bias added to ou before step() to sharpen the over/under decision
+#define SHADOW_OPACITY       0.4
+#define SHADOW_FRINGE_OPACITY 0.5
+#define OVER_THRESHOLD       0.1
 
 #define SCALE            3.5
 #define BAND_W           0.10      // half-width of each band ribbon
@@ -118,7 +124,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         // Drop shadow: darken background near ribbon edge when under
         float shadowFringe = smoothstep(BAND_W + BAND_EDGE,
                                         BAND_W + BAND_EDGE + SHADOW_D, minDist);
-        col = mix(col, COL_SHADOW * 0.5, (1.0 - shadowFringe) * 0.4 * step(0.0, ou - 0.1));
+        col = mix(col, COL_SHADOW * SHADOW_FRINGE_OPACITY,
+                  (1.0 - shadowFringe) * SHADOW_OPACITY * step(0.0, ou - OVER_THRESHOLD));
 
         col = mix(col, bandCol, inside);
     }

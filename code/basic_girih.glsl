@@ -7,9 +7,11 @@
 // This recreates the decagonal star patterns found in 13th–15th century
 // Islamic architecture (Alhambra, Topkapi, Darb-i Imam shrine).
 //
-// References:
-//  Lu & Steinhardt, "Decagonal and Quasi-Crystalline Tilings in Medieval
-//  Islamic Architecture", Science 2007.
+// Glow rendering parameters:
+//   GLOW_INTENSITY_SCALE: multiplier converting raw 1/d² into [0,1] range
+//   GLOW_MAX_BRIGHTNESS: maximum glow contribution before clamping
+#define GLOW_INTENSITY_SCALE  0.012
+#define GLOW_MAX_BRIGHTNESS   0.7
 
 #define SCALE       3.5        // zoom level (tile size)
 #define LINE_WIDTH  0.03       // strapwork line half-width (0..0.5)
@@ -91,7 +93,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // Glow halo (additive, falls off as 1/d²)
     float glow = GLOW_WIDTH / (d * d + 0.001);
-    glow = clamp(glow * 0.012, 0.0, 0.7);
+    glow = clamp(glow * GLOW_INTENSITY_SCALE, 0.0, GLOW_MAX_BRIGHTNESS);
     col += COL_GLOW * glow;
 
     // Hard line on top of glow

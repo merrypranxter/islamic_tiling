@@ -11,8 +11,15 @@
 //   • Colours: organic — pale amber cytoplasm, dark olive cell walls,
 //              deep crimson nuclei, cream fasciae
 //
-// "Consider the creation of the heavens and the earth and the alternation
-//  of night and day and [what] God has sent down from the heavens." — Quran
+// Nucleus detection thresholds (pentagrid cosine field ∈ [-5, +5]):
+//   NUC_OUTER: outer boundary of nucleus detection (softer halo)
+//   NUC_INNER: inner core (full nucleus opacity)
+//   NUC_RING_CENTRE: potential value at the membrane ring midline (≈ -4.7)
+//   NUC_RING_WIDTH: half-width of the membrane ring in potential-field units
+#define NUC_OUTER       -4.5
+#define NUC_INNER       -4.9
+#define NUC_RING_CENTRE  4.7
+#define NUC_RING_WIDTH   0.25
 
 #define SCALE              4.0
 #define WALL_W             0.045    // cell wall half-width
@@ -106,7 +113,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // ---- Cell nucleus at rosette centres ----
     float rPot   = rosettePot(p, sp);
-    float nucMask= smoothstep(-4.5, -4.9, rPot);  // near decagon centres
+    float nucMask= smoothstep(NUC_OUTER, NUC_INNER, rPot);  // near decagon centres
     // Nucleus interior
     col = mix(col, C_NUC, nucMask * inside);
     // Chromatin: brighter specks within nucleus (noise-textured)
@@ -114,7 +121,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float chromMask = nucMask * inside * step(CHROMATIN_THRESHOLD, chromTex);
     col = mix(col, C_CHROM, chromMask * 0.8);
     // Nucleus membrane ring
-    float nucRing = abs(rPot + 4.7) < 0.25 ? 1.0 : 0.0;
+    float nucRing = abs(rPot + NUC_RING_CENTRE) < NUC_RING_WIDTH ? 1.0 : 0.0;
     col = mix(col, C_NUC * 0.6, nucRing * inside * 0.5);
 
     // ---- Cell wall (main strapwork) ----

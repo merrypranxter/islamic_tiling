@@ -16,7 +16,11 @@
 //   • Pentatonic palette: warm gold (Do), terracotta (Re), sage (Mi),
 //                         sky blue (Sol), violet (La)
 //
-// The result should be felt as rhythm — a visual tabla.
+// Rosette potential thresholds (pentagrid sum cosine field ∈ [-5, +5]):
+//   ROSETTE_POT_OUTER: field value at the outer edge of the rosette detection zone
+//   ROSETTE_POT_CENTRE: field value at a perfect 10-fold rosette centre (≈ -5)
+#define ROSETTE_POT_OUTER   -4.3
+#define ROSETTE_POT_CENTRE  -5.0
 
 #define SCALE        4.0
 #define LINE_W       0.030
@@ -136,7 +140,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // When the wavefront passes a rosette centre, it triggers a bright flare
     // Model: rosette "rings" at radius R_wave at time T_ring
     float rPot    = rosettePot(p, sp);
-    float isRos   = smoothstep(-4.3, -5.0, rPot); // near a rosette centre
+    float isRos   = smoothstep(ROSETTE_POT_OUTER, ROSETTE_POT_CENTRE, rPot);
 
     // Multiple wave arrivals create multiple flares
     float flareAmp = 0.0;

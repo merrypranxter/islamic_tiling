@@ -17,6 +17,12 @@
 //   - Buff/ivory carved stucco for small tiles
 //   - Gold-lustre accents on rosette centres
 
+// Rosette glow thresholds (pentagrid cosine field ∈ [-5, +5]):
+//   ROSETTE_GLOW_OUTER: outer edge of gold lustre halo
+//   ROSETTE_GLOW_INNER: inner bright core (deeper minimum, tighter radius)
+#define ROSETTE_GLOW_OUTER  -4.5
+#define ROSETTE_GLOW_INNER  -4.8
+
 #define SCALE       4.0
 #define PI          3.14159265358979
 #define PHI         1.61803398874989   // golden ratio τ
@@ -127,7 +133,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // --- Rosette glow (gold lustre at 10-fold rosette centres) ---
     float rField = rosetteDist(p, sp);
-    float rGlow  = smoothstep(-4.5, -4.8, rField);
+    float rGlow  = smoothstep(ROSETTE_GLOW_OUTER, ROSETTE_GLOW_INNER, rField);
     col = mix(col, C_GOLD, rGlow * 0.6);
 
     // Soft vignette

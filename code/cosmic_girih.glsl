@@ -9,8 +9,19 @@
 //   • Nebula glow: Gaussian haze in turquoise/violet around each rosette
 //   • The entire pattern slowly rotates like the celestial sphere
 //
-// "The heavens declare the glory of God; the skies proclaim the work
-//  of his hands." — Psalm 19:1 (echoed in Islamic astronomy tradition)
+// Rosette potential field thresholds (cosine sum ∈ [-5, +5]):
+//   NEBULA_OUTER_BOUND: outer radius of broad nebula haze
+//   NEBULA_ROSETTE_BOUND: tighter rosette-core nebula
+//   CORE_GLOW_OUTER: start of galactic core glow
+//   CORE_CENTRE: perfect 10-fold centre value (≈ -5)
+//   CORE_STAR_INNER: inner point-like stellar core threshold
+#define NEBULA_OUTER_BOUND   -3.0
+#define NEBULA_ROSETTE_BOUND -4.8
+#define NEBULA2_OUTER        -2.0
+#define NEBULA2_INNER        -4.0
+#define CORE_GLOW_OUTER      -4.5
+#define CORE_CENTRE          -5.0
+#define CORE_STAR_INNER      -4.85
 
 #define SCALE       4.2
 #define LINE_W      0.028
@@ -101,8 +112,8 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // ---- Nebula glow at rosette centres ----
     float rPot = rosettePot(p, sp);
     // rPot ∈ [-5, 5]; deep minima (≈ -5) are rosette centres
-    float nebulaT  = smoothstep(-3.0, -4.8, rPot);
-    float nebulaT2 = smoothstep(-2.0, -4.0, rPot);
+    float nebulaT  = smoothstep(NEBULA_OUTER_BOUND,   NEBULA_ROSETTE_BOUND, rPot);
+    float nebulaT2 = smoothstep(NEBULA2_OUTER,        NEBULA2_INNER,        rPot);
     vec3  nebulaCol = mix(C_NEBULA_A, C_NEBULA_B,
                          sin(rPot * 0.8 + iTime * 0.05)*0.5+0.5);
     col += nebulaCol * nebulaT * 0.55;
@@ -119,10 +130,10 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     col = mix(col, C_ORBIT * 1.4, orbitLine * 0.75);
 
     // ---- Galactic core (bright star at each rosette centre) ----
-    float coreGlow = smoothstep(-4.5, -5.0, rPot);
+    float coreGlow = smoothstep(CORE_GLOW_OUTER, CORE_CENTRE,     rPot);
     col += C_CORE * coreGlow * 1.8;
     // Inner point-like core
-    float coreStar = smoothstep(-4.85, -5.0, rPot);
+    float coreStar = smoothstep(CORE_STAR_INNER,  CORE_CENTRE,     rPot);
     col = mix(col, vec3(1.0), coreStar * 0.9);
 
     // ---- Lens flare / diffraction spikes on bright cores ----

@@ -10,8 +10,11 @@
 //   • Bit-depth quantisation artefacts in shadow regions
 //   • The sacred geometry "fights back" — corruption fades near rosette centres
 //
-// The tension between order and entropy mirrors the Islamic philosophical
-// concept of the created world maintaining coherence through divine will.
+// Order-field thresholds: rosette centres resist digital corruption.
+//   ORDER_FIELD_OUTER: outer boundary of the "immune zone" around each rosette
+//   ORDER_FIELD_CENTRE: perfect 10-fold rosette centre (deepest potential minimum)
+#define ORDER_FIELD_OUTER  -3.0
+#define ORDER_FIELD_CENTRE -4.8
 
 #define SCALE       4.0
 #define LINE_W      0.033
@@ -121,7 +124,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // ---- Rosette centres resist corruption (order fighting chaos) ----
     vec2 p0 = uv0 * SCALE;
     float rPot = rosettePot(p0, 1.0);
-    float orderField = smoothstep(-3.0, -4.8, rPot);
+    float orderField = smoothstep(ORDER_FIELD_OUTER, ORDER_FIELD_CENTRE, rPot);
     // Blend back clean signal near rosette centres
     vec3 cleanCol = sampleGirih(uv0);
     col = mix(col, cleanCol, orderField * 0.7);

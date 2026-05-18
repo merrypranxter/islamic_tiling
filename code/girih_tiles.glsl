@@ -72,14 +72,21 @@ float allDist(vec2 p, float sp) {
 //   class 1,4,6,9 → pentagon/bowtie
 //   class 2,3,7,8 → barrel/rhombus
 // TILE_EPS (0.5) is the half-integer threshold separating adjacent classes.
-#define TILE_EPS 0.5
+// Additional class boundaries (all half-integers between mod-10 classes):
+#define TILE_EPS       0.5   // classes 0/1 boundary
+#define TILE_B25       2.5   // classes 1/2 boundary
+#define TILE_B35       3.5   // classes 2/3 boundary
+#define TILE_B45       4.5   // classes 3/4 boundary
+#define TILE_B55       5.5   // classes 5/6 boundary  (antipodal to 0.5)
+#define TILE_B65       6.5   // classes 6/7 boundary
+#define TILE_B75       7.5   // classes 7/8 boundary
 int tileType(vec2 p, float sp) {
     float s = mod(pgSum(p, sp), 10.0);
-    if (s < TILE_EPS || (s > 4.5 && s < 5.5))   return 0; // decagon centres
-    if (s < 2.5      || (s > 7.5))               return 1; // pentagon
-    if (s < 3.5      || (s > 6.5 && s < 7.5))   return 2; // barrel
-    if (s < 4.5      || (s > 5.5 && s < 6.5))   return 3; // bowtie
-    return 4;                                               // rhombus
+    if (s < TILE_EPS || (s > TILE_B45 && s < TILE_B55))   return 0; // decagon
+    if (s < TILE_B25  || (s > TILE_B75))                  return 1; // pentagon
+    if (s < TILE_B35  || (s > TILE_B65 && s < TILE_B75))  return 2; // barrel
+    if (s < TILE_B45  || (s > TILE_B55 && s < TILE_B65))  return 3; // bowtie
+    return 4;                                                         // rhombus
 }
 
 vec3 tileColor(int t) {

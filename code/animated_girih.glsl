@@ -93,10 +93,14 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // Growth front mask: everything beyond the front is dark
     float dist   = length(p) / sp;           // radial distance in tile units
-    float reveal = smoothstep(growFront - 1.2, growFront + 0.3, dist);
+    float reveal = smoothstep(growFront - GROWTH_SOFT_INNER, growFront + GROWTH_SOFT_OUTER, dist);
     col = mix(col, C_BG, reveal);
 
-    // Seed glow at origin (always visible)
+    // Growth front transition widths:
+//   GROWTH_SOFT_INNER: tiles within this distance behind front are fully revealed
+//   GROWTH_SOFT_OUTER: tiles within this distance ahead of front are partially revealed
+#define GROWTH_SOFT_INNER  1.2
+#define GROWTH_SOFT_OUTER  0.3
     float seedGlow = exp(-length(p)*length(p) * 2.0);
     col += C_SEED * seedGlow * 0.8 * smoothstep(0.0, 0.5, iTime);
 

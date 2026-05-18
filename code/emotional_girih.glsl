@@ -19,7 +19,9 @@
 //   GRIEF starts ramping in at EMO_GRIEF_START, fully present at EMO_GRIEF_PEAK
 //   AWE glow starts at EMO_AWE_START, fully present at EMO_AWE_PEAK
 // These are used for state-specific visual effects that differ from palette blending.
-#define EMO_GRIEF_START 1.5
+// EMO_AWE_END / EMO_CHAOS_START: awe state ends and chaos begins at emotion index 4.5
+// (halfway through the chaos state's ramp-in within the 0-5 continuous index)
+#define EMO_AWE_END  4.5
 #define EMO_GRIEF_PEAK  2.5
 #define EMO_AWE_START   2.5
 #define EMO_AWE_PEAK    3.5
@@ -115,7 +117,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // Glow (stronger in awe state)
     float aweFactor = smoothstep(EMO_AWE_START, EMO_AWE_PEAK, emoF)
-                    * (1.0 - smoothstep(EMO_AWE_PEAK, 4.5, emoF));
+                    * (1.0 - smoothstep(EMO_AWE_PEAK, EMO_AWE_END, emoF));
     float glow = 0.008 / (d*d + 0.001);
     col += lineCol * glow * (0.4 + aweFactor * 1.2);
 
