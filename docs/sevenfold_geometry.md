@@ -37,43 +37,20 @@ vector **v**. Then **v** rotated by 2π/n is also a lattice vector. Call it **v'
 The sum **v + v'** must also be a lattice vector (lattices are closed under addition).
 But |**v + v'**| = 2|**v**| cos(π/n).
 
-For this to produce a valid lattice vector:
-- |**v + v'**| must be a rational multiple of |**v**| (since lattice vectors have
-  integer combinations)
-- Therefore: 2 cos(π/n) ∈ ℤ (must be an integer)
+For this to produce a valid lattice vector, the rotation must map lattice vectors to
+lattice vectors. This constrains: **2cos(2π/n) ∈ ℤ** (the trace of the rotation matrix
+must be an integer for it to act on an integer lattice).
 
-The values of n for which 2cos(π/n) ∈ {−2, −1, 0, 1, 2}:
 ```
-n = 1:  2cos(180°) = −2  ✓
-n = 2:  2cos(90°)  =  0  ✓
-n = 3:  2cos(60°)  =  1  ✓
-n = 4:  2cos(45°)  = √2 ≈ 1.414  ✗
-n = 5:  2cos(36°)  = φ  ≈ 1.618  ✗
-n = 6:  2cos(30°)  = √3 ≈ 1.732  ✗
-n = 7:  2cos(π/7)  ≈ 1.802       ✗
-n = 8:  2cos(22.5°) ≈ 1.848      ✗
-```
-
-Wait — this list is wrong. Let me correct: 2cos(π/n) values for small n:
-```
-n = 1:  2cos(π/1) = 2cos(180°) = −2  ∈ ℤ  ✓  → 1-fold
-n = 2:  2cos(π/2) = 2cos(90°)  =  0  ∈ ℤ  ✓  → 2-fold
-n = 3:  2cos(π/3) = 2cos(60°)  =  1  ∈ ℤ  ✓  → 3-fold (gives 6-fold lattice)
-n = 4:  2cos(π/4) = 2cos(45°)  = √2  ∉ ℤ  ✗
-n = 6:  2cos(π/6) = 2cos(30°)  = √3  ∉ ℤ  ✗
-```
-
-Actually the correct statement is: for a 2D periodic lattice with rotation symmetry
-of order n, we need 2cos(2π/n) ∈ ℤ (angle for the rotation, not π/n):
-```
-n = 1:  2cos(360°) = 2  ∈ ℤ  ✓
-n = 2:  2cos(180°) = −2 ∈ ℤ  ✓
-n = 3:  2cos(120°) = −1 ∈ ℤ  ✓
-n = 4:  2cos(90°)  =  0 ∈ ℤ  ✓
-n = 6:  2cos(60°)  =  1 ∈ ℤ  ✓
-n = 5:  2cos(72°)  = φ−1 = 1/φ ≈ 0.618  ∉ ℤ  ✗
-n = 7:  2cos(2π/7) ≈ 1.247               ∉ ℤ  ✗
-n = 8:  2cos(45°)  = √2  ≈ 1.414         ∉ ℤ  ✗
+n = 1:  2cos(360°) =  2  ∈ ℤ  ✓  → trivial (identity)
+n = 2:  2cos(180°) = −2  ∈ ℤ  ✓  → 2-fold
+n = 3:  2cos(120°) = −1  ∈ ℤ  ✓  → 3-fold
+n = 4:  2cos(90°)  =  0  ∈ ℤ  ✓  → 4-fold
+n = 6:  2cos(60°)  =  1  ∈ ℤ  ✓  → 6-fold
+n = 5:  2cos(72°)  ≈  0.618      ∉ ℤ  ✗
+n = 7:  2cos(2π/7) ≈  1.247      ∉ ℤ  ✗
+n = 8:  2cos(45°)  = √2 ≈ 1.414  ∉ ℤ  ✗
+n = 12: 2cos(30°)  = √3 ≈ 1.732  ∉ ℤ  ✗
 ```
 
 Only n ∈ {1, 2, 3, 4, 6} satisfy 2cos(2π/n) ∈ ℤ — these are the only allowed

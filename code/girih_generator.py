@@ -122,14 +122,22 @@ class Pentagrid:
         """
         Classify the tile at point p based on its index sum modulo 10.
 
+        This is a heuristic classification valid for the 5-family pentagrid dual
+        (N=5). The five girih tile types correspond to five residue classes:
+          s ≡ 0 or 5 (mod 10) → decagon
+          s ≡ 1 or 6 (mod 10) → pentagon
+          s ≡ 2 or 7 (mod 10) → barrel (elongated hexagon)
+          s ≡ 3 or 8 (mod 10) → bowtie
+          s ≡ 4 or 9 (mod 10) → rhombus
+
         Returns one of: 'decagon', 'pentagon', 'barrel', 'bowtie', 'rhombus'
         """
         s = self.index_sum(p) % 10
-        if s in (0, 5):      return 'decagon'
-        if s in (1, 4, 6, 9): return 'pentagon'
-        if s in (2, 7):      return 'barrel'
-        if s in (3, 8):      return 'bowtie'
-        return 'rhombus'     # s in (4, 9) already caught; fallback
+        if s in (0, 5):  return 'decagon'
+        if s in (1, 6):  return 'pentagon'
+        if s in (2, 7):  return 'barrel'
+        if s in (3, 8):  return 'bowtie'
+        return 'rhombus'  # s ∈ {4, 9}
 
 
 class GirihTiling:
@@ -363,7 +371,7 @@ def main():
     print(f"  Symbolic arithmetic: {SYMPY_OK}")
 
     # Build the grid
-    grid   = Pentagrid(num_families=args.symmetry, n_strips=args.n_strips)
+    grid = Pentagrid(num_families=args.symmetry, n_strips=args.n_strips)
     tiling = GirihTiling(grid)
 
     # Generate and classify vertices

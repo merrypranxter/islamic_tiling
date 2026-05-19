@@ -40,6 +40,11 @@
 // Shadow parameters for isometric view
 #define SHADOW_STR    0.55       // shadow blend strength on south/bottom faces
 #define AMBIENT       0.35       // ambient light level on unlit faces
+// Vertical face threshold: fraction of CELL_HEIGHT used to detect the south-face band
+// on the isometric projection.  0.4 means the south-face shadow zone spans ±40% of
+// one storey height in screen-space — wide enough to be visible without bleeding into
+// adjacent tiers.
+#define V_FACE_THRESH 0.4
 
 // Muqarnas palette: aged stone, gilded stucco, lapis blue, deep shadow
 const vec3 C_TOP    = vec3(0.82, 0.75, 0.58);   // lit top face (stucco)
@@ -203,7 +208,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
         // Vertical shadow face below each cell (south face)
         float vFaceY = uv.y * SCALE - (float(tier) * CELL_HEIGHT + CELL_HEIGHT * 0.5);
-        if (abs(vFaceY) < CELL_HEIGHT * 0.4 && dist > -0.02) {
+        if (abs(vFaceY) < CELL_HEIGHT * V_FACE_THRESH && dist > -0.02) {
             float southFade = smoothstep(-0.02, 0.0, dist);
             col = mix(col, C_SOUTH * float(tier+1) / float(NUM_TIERS), southFade * SHADOW_STR);
         }

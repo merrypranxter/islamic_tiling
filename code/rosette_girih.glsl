@@ -39,6 +39,10 @@
 #define INNER_R         0.15     // inner core radius
 #define PI              3.14159265358979
 #define TAU             6.28318530717959
+// Core fill radius fraction: the filled core disc is rendered at 90% of innerR so
+// the strapwork ring line at innerR sits visually inside the filled area rather than
+// overlapping the outer edge of the fill.  Value <1.0 prevents aliasing at the boundary.
+#define CORE_FILL_RATIO 0.9
 
 // Traditional illuminated manuscript palette: cobalt, gold, deep carmine, ivory
 const vec3 C_BG       = vec3(0.05, 0.08, 0.28);   // lapis lazuli field
@@ -164,7 +168,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     col = mix(col, C_PETAL2, petalFill * alt * 0.5);
 
     // Inner core fill
-    float coreFill = 1.0 - smoothstep(-0.01, 0.01, innerR * 0.9 - length(p));
+    float coreFill = 1.0 - smoothstep(-0.01, 0.01, innerR * CORE_FILL_RATIO - length(p));
     col = mix(col, C_CORE, coreFill * 0.85);
 
     // Strapwork outline (crisp line at dist ≈ 0)
