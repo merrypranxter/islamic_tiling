@@ -16,12 +16,13 @@
 #define SCALE           4.0
 #define PI              3.14159265358979
 // Emotion transition boundaries (in continuous emotion index emoF ∈ [0,5)):
-//   GRIEF starts ramping in at EMO_GRIEF_START, fully present at EMO_GRIEF_PEAK
+//   GRIEF starts ramping in at EMO_GRIEF_START (mid-joy), fully present at EMO_GRIEF_PEAK
 //   AWE glow starts at EMO_AWE_START, fully present at EMO_AWE_PEAK
 // These are used for state-specific visual effects that differ from palette blending.
 // EMO_AWE_END / EMO_CHAOS_START: awe state ends and chaos begins at emotion index 4.5
 // (halfway through the chaos state's ramp-in within the 0-5 continuous index)
-#define EMO_AWE_END  4.5
+#define EMO_GRIEF_START 1.5
+#define EMO_AWE_END     4.5
 #define EMO_GRIEF_PEAK  2.5
 #define EMO_AWE_START   2.5
 #define EMO_AWE_PEAK    3.5

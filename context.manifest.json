@@ -8,10 +8,17 @@
     "Polygonal sub-grid construction method",
     "Girih tile aperiodic tiling",
     "Five-fold and ten-fold symmetry",
+    "Seven-fold heptagrid quasiperiodic tiling",
+    "Eight-fold Ammann-Beenker tiling",
+    "Twelve-fold dodecagonal patterns",
     "Quasicrystalline order (Darb-i Imam)",
     "Strapwork interlacing",
-    "Proportional systems (√2, √3, φ)",
-    "Compass and straightedge construction"
+    "Proportional systems (√2, √3, φ, 2cos(π/7))",
+    "Compass and straightedge construction",
+    "Rosette as atomic pattern unit",
+    "Muqarnas stalactite vaulting",
+    "Inflation and deflation self-similarity",
+    "Regional styles: Andalusian, Persian, Moroccan, Ottoman"
   ],
   "blend_suggestions": [
     "sacred_geometry",
@@ -21,6 +28,18 @@
     "caustic_networks",
     "bioluminescent_systems",
     "tesselations"
+  ],
+  "documentation": [
+    "docs/construction_methods.md",
+    "docs/girih_tile_rules.md",
+    "docs/darb_imam_analysis.md",
+    "docs/proportional_systems.md",
+    "docs/strapwork_weaving.md",
+    "docs/art_history.md",
+    "docs/rosettes.md",
+    "docs/muqarnas.md",
+    "docs/regional_styles.md",
+    "docs/sevenfold_geometry.md"
   ],
   "code_templates": [
     "code/basic_girih.glsl",
@@ -32,21 +51,31 @@
     "code/cosmic_girih.glsl",
     "code/digital_girih.glsl",
     "code/biological_girih.glsl",
-    "code/musical_girih.glsl"
+    "code/musical_girih.glsl",
+    "code/sevenfold_girih.glsl",
+    "code/octagonal_girih.glsl",
+    "code/rosette_girih.glsl",
+    "code/muqarnas_girih.glsl",
+    "code/dodecagonal_girih.glsl",
+    "code/inflation_girih.glsl",
+    "code/girih_generator.py"
   ],
   "parameter_space": {
-    "symmetryOrder": {"type": "enum", "options": [5, 6, 8, 10, 12], "default": 10},
+    "symmetryOrder": {"type": "enum", "options": [5, 6, 7, 8, 10, 12], "default": 10},
     "patternDensity": {"type": "int", "range": [1, 5], "default": 3},
-    "tileType": {"type": "enum", "options": ["girih", "polygonal", "rosette", "star"], "default": "girih"},
+    "tileType": {"type": "enum", "options": ["girih", "polygonal", "rosette", "star", "muqarnas", "inflation"], "default": "girih"},
     "strapwork": {"type": "bool", "default": true},
     "weaveRule": {"type": "enum", "options": ["over_under", "alternate", "random"], "default": "over_under"},
-    "colorScheme": {"type": "enum", "options": ["traditional", "metallic", "jewel", "night", "modern"], "default": "traditional"},
+    "colorScheme": {"type": "enum", "options": ["traditional", "metallic", "jewel", "night", "modern", "alhambra", "isfahan", "moroccan", "ottoman"], "default": "traditional"},
     "goldLeaf": {"type": "float", "range": [0.0, 1.0], "default": 0.3},
     "lineWidth": {"type": "float", "range": [0.001, 0.05], "default": 0.005},
-    "animation": {"type": "enum", "options": ["none", "rotate", "pulse", "grow", "morph"], "default": "none"},
+    "animation": {"type": "enum", "options": ["none", "rotate", "pulse", "grow", "morph", "inflate", "deflate"], "default": "none"},
     "quasiCrystal": {"type": "bool", "default": true},
+    "quasiMode": {"type": "enum", "options": ["periodic", "ammann_beenker", "penrose", "heptagrid"], "default": "penrose"},
     "background": {"type": "enum", "options": ["solid", "gradient", "space", "architectural"], "default": "solid"},
-    "decoration": {"type": "enum", "options": ["plain", "interlace", "knot", "arabesque"], "default": "interlace"}
+    "decoration": {"type": "enum", "options": ["plain", "interlace", "knot", "arabesque"], "default": "interlace"},
+    "regionalStyle": {"type": "enum", "options": ["andalusian", "persian", "moroccan", "ottoman", "mamluk", "central_asian"], "default": "persian"},
+    "rosetteStyle": {"type": "enum", "options": ["10_3", "10_4", "8_3", "12_5", "7_2", "7_3"], "default": "10_3"}
   },
   "artistic_keywords": [
     "islamic geometry",
@@ -58,6 +87,18 @@
     "rosette",
     "sacred geometry",
     "five-fold symmetry",
-    "Penrose tiling"
+    "seven-fold symmetry",
+    "eight-fold symmetry",
+    "twelve-fold symmetry",
+    "Penrose tiling",
+    "muqarnas",
+    "stalactite vaulting",
+    "inflation deflation",
+    "Ammann-Beenker",
+    "zellige",
+    "Iznik tile",
+    "Persian tilework",
+    "heptagrid",
+    "dodecagram"
   ]
 }
